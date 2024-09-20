@@ -1,4 +1,70 @@
-# 1. Test Case
+# 1. EDA
+
+### 1. Age
+![](assets/Age_EDA.png)
+
+- df.describe() - 고객 연령의 최소값은 18세, 최대값은 95세
+- 따라서 각 연령대의 수를 세기 위해서는 bins 인자를 95-18+1로 설정해야 합니다.
+- 대부분의 고객은 30~50세 사이에 위치
+- 박스플롯에 따르면 70세 이상의 연령은 이상치로 간주됨
+- 마지막 히스토그램은 이상치를 제외한 연령에 대한 히스토그램입니다.
+
+### 2. Job
+![](assets/Job_EDA.png)
+
+- management 직업군이 가장 많은 수를 차지
+- 직업에 대한 "unknown" 카테고리는 결측값으로 간주될 수 있으며, 가장 적은 수를 가지고 있음
+- "unknown" 다음으로 "student" 직업 카테고리가 두 번째로 적은 수를 차지
+```
+직업별 고객 수:
+job
+management     2566
+blue-collar    1944
+technician     1823
+Name: count, dtype: int64
+```
+
+### 3. Marital
+![](assets/Marital_EDA.png)
+
+- 기혼자가 가장 많은 수를 차지하며, 그다음으로 미혼자와 이혼자가 차례대로 뒤따름
+
+### 4. Default
+![](assets/Default_EDA.png)
+
+- 고객이 신용 불이행(default)이 있는지 여부를 나타냄. 대부분의 고객이 신용 불이행이 없음
+
+### 5. Balance
+![](assets/Balance_EDA.png)
+
+- 이 칼럼은 각 고객의 연간 평균 잔액을 나타냄
+- 이 칼럼의 최소값은 -6847, 최대값은 81204, 평균은 약 1529, 표준편차는 3225
+- 이러한 통계적 지표들은 이 칼럼이 다양한 값을 가지고 있으며 많은 이상치(outliers)가 존재한다는 것을 보여줍니다.
+- 아래 히스토그램과 박스플롯을 통해 값의 빈도를 확인하고 이상치를 찾을 수 있습니다. 마지막 그래프는 박스플롯에서 확인된 이상치를 제외한 잔액 칼럼의 히스토그램입니다.
+
+
+#### 이상치 경계 서치
+```python
+balance_data = df["balance"]
+
+Q1 = np.percentile(balance_data, 25)
+Q3 = np.percentile(balance_data, 75)
+
+IQR = Q3 - Q1
+
+lower_whisker = Q1 - 1.5 * IQR
+upper_whisker = Q3 + 1.5 * IQR
+# 이상치 경계 _ ex. -2257 이하, 4087이상의 값들은 모두 이상치로 처리 가능
+print("Lower whisker:", lower_whisker)
+print("Upper whisker:", upper_whisker)
+```
+```bash
+Lower whisker: -2257.0
+Upper whisker: 4087.0
+```
+
+
+# 2. Test Case
 
 ![](assets/test_result.png)
 
